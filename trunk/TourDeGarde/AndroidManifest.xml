@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity android:name="fr.edenyorke.tourdegarde.SettingsActivity"
+		    android:windowSoftInputMode="stateHidden">"
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<action android:name="android.intent.action.EDIT" />
+			</intent-filter>
+		</activity>
     </application>
 
 </manifest>

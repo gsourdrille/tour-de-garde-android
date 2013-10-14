@@ -4,5 +4,12 @@
     <string name="app_name">Tour de Garde</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-
+    
+    <string name="dateDebutText">Début de la garde :</string>
+	<string name="dateFinText">Fin de la garde :</string>
+	<string name="periodeText">Périodicité :</string>
+	<string name="estPeriodeText">Est une période de garde :</string>
+	
+	<string name="oui">Oui</string>
+	<string name="non">Non</string>
 </resources>
