@@ -12,94 +12,108 @@
     tools:context=".Settings" >
 
     <LinearLayout
-        android:layout_width="277dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="50dp"
+        android:id="@+id/dateDebutBouton"
+        android:clickable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="100dp"
         android:layout_weight="0.00" 
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:background="@drawable/layout_selector">
 
         <TextView
             android:id="@+id/dateDebutText"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/dateDebutText"
-            android:textColor="#FFFFFF" />
-
-        <Button
-            android:id="@+id/dateDebutBouton"
+            android:layout_marginLeft="10dp"
+            android:textColor="#000000" />
+        <TextView
+            android:id="@+id/dateDebutValue"
             android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:textColor="#000000" 
-            android:background="@drawable/rounded_button"
-            android:textSize="30px"/>
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginLeft="10dp"
+            android:textColor="#000000" />
+
     </LinearLayout>
     
     <LinearLayout
-        android:layout_width="277dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+        android:id="@+id/dateFinBouton"
+        android:clickable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="0.00" 
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:background="@drawable/layout_selector">
 
         <TextView
             android:id="@+id/dateFinText"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/dateFinText"
-            android:textColor="#FFFFFF" />
-
-        <Button
-            android:id="@+id/dateFinBouton"
+            android:layout_marginLeft="10dp"
+            android:textColor="#000000" />
+        <TextView
+            android:id="@+id/dateFinValue"
             android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:textColor="#000000" 
-            android:background="@drawable/rounded_button"
-            android:textSize="30px"/>
+            android:layout_height="wrap_content"
+             android:text=""
+            android:layout_marginLeft="10dp"
+            android:textColor="#000000" />
+       
     </LinearLayout>
     <LinearLayout
-        android:layout_width="277dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+        android:id="@+id/periodeBouton"
+        android:clickable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="0.00" 
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:background="@drawable/layout_selector">
 
         <TextView
             android:id="@+id/periodeText"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/periodeText"
-            android:textColor="#FFFFFF" />
-
-        <Button
-            android:id="@+id/periodeBouton"
+            android:layout_marginLeft="10dp"
+            android:textColor="#000000" />
+ 	<TextView
+            android:id="@+id/periodeValue"
             android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:textColor="#000000" 
-            android:background="@drawable/rounded_button"
-            android:textSize="30px"/>
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginLeft="10dp"
+            android:textColor="#000000" />
+       
     </LinearLayout>
     <LinearLayout
-        android:layout_width="277dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+        android:id="@+id/estPeriodeBouton"
+        android:clickable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="0.00" 
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:background="@drawable/layout_selector">
 
         <TextView
             android:id="@+id/estPeriodeText"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/estPeriodeText"
-            android:textColor="#FFFFFF" />
-
-        <ToggleButton
-            android:id="@+id/estPeriodeBouton"
-            android:layout_width="wrap_content"
+             android:layout_marginLeft="10dp"
+            android:textColor="#000000" />
+         <TextView
+            android:id="@+id/estPeriodeValue"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_button"
-            android:textOn="@string/oui" 
-            android:textOff="@string/non" />
-       
+            android:text=""
+             android:layout_marginLeft="10dp"
+            android:textColor="#000000" />
     </LinearLayout>
 
 </LinearLayout>
