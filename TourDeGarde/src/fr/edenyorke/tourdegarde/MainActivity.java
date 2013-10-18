@@ -1,25 +1,18 @@
 package fr.edenyorke.tourdegarde;
 
 import java.util.Calendar;
-import java.util.Locale;
 
-import kankan.wheel.widget.WheelView;
-import kankan.wheel.widget.adapters.NumericWheelAdapter;
-import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.ImageView;
-import fr.edenyorke.tourdegarde.adapter.DayArrayAdapter;
 
 public class MainActivity extends Activity implements OnDateChangedListener{
 	
 	
+	private DatePicker datePicker;
 	private ImageView image;
 	
 	private int year;
@@ -38,56 +31,17 @@ public class MainActivity extends Activity implements OnDateChangedListener{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-    		ActionBar actionBar = getActionBar();
-    		actionBar.setDisplayHomeAsUpEnabled(true);
-    	}
         return true;
     }
     
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	switch (item.getItemId()) {
-    	case android.R.id.home:
-			onBackPressed();
-			return true;
-    	case R.id.menu_settings:
-    		Intent myIntent = new Intent(MainActivity.this, SettingsActivity.class);
-    		MainActivity.this.startActivity(myIntent);
-    		return true;
-    	default:
-    		return super.onOptionsItemSelected(item);
-    	}
-    }
-    
     private void initView(){
+    	datePicker = (DatePicker) findViewById(R.id.datePicker);
+    	datePicker.setSpinnersShown(true);
+ 		datePicker.setCalendarViewShown(false);
  		
- 		image = (ImageView) findViewById(R.id.imageView1);
- 		
- 		
- 		 final WheelView hours = (WheelView) findViewById(R.id.hour);
-         NumericWheelAdapter hourAdapter = new NumericWheelAdapter(this, 0, 23,"%02d");
-         hourAdapter.setItemResource(R.layout.wheel_text_item);
-         hourAdapter.setItemTextResource(R.id.text);
-         hours.setViewAdapter(hourAdapter);
-         hours.setCyclic(true);
-     
-         final WheelView mins = (WheelView) findViewById(R.id.mins);
-         NumericWheelAdapter minAdapter = new NumericWheelAdapter(this, 0, 59, "%02d");
-         minAdapter.setItemResource(R.layout.wheel_text_item);
-         minAdapter.setItemTextResource(R.id.text);
-         mins.setViewAdapter(minAdapter);
-         mins.setCyclic(true);
-         
-         // set current time
-         Calendar calendar = Calendar.getInstance(Locale.FRANCE);
-         hours.setCurrentItem(calendar.get(Calendar.HOUR));
-         mins.setCurrentItem(calendar.get(Calendar.MINUTE));
-         
-         final WheelView day = (WheelView) findViewById(R.id.day);
-         day.setViewAdapter(new DayArrayAdapter(this, calendar));        
- 		
+ 		image = (ImageView) findViewById(R.id.resultImageView);
     }
     
  // display current date
@@ -98,10 +52,11 @@ public class MainActivity extends Activity implements OnDateChangedListener{
  		month = c.get(Calendar.MONTH);
  		day = c.get(Calendar.DAY_OF_MONTH);
  		// set current date into datepicker
+ 		datePicker.init(year, month, day, this);
  		
+ 
+  
  	}
- 	
- 	
 
 
 	@Override
