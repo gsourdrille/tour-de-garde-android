@@ -22,5 +22,15 @@ public class DateUtils {
 		return dateFormate;
 		
 	}
+	
+public final static String formatDate(Date date){
+		
+		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
+		String dateFormate = null;
+		dateFormate = sdf.format(date);
+		
+		return dateFormate;
+		
+	}
 
 }
