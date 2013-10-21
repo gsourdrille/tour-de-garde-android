@@ -3,16 +3,20 @@ package fr.edenyorke.tourdegarde;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 
 public class MainActivity extends Activity implements OnDateChangedListener{
 	
 	
 	private DatePicker datePicker;
+	private NumberPicker inDayPicker;
 	private ImageView image;
 	
 	private int year;
@@ -27,11 +31,25 @@ public class MainActivity extends Activity implements OnDateChangedListener{
         setCurrentDateOnView();
         
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+    	case android.R.id.home:
+			onBackPressed();
+			return true;
+    	case R.id.menu_settings:
+    		Intent myIntent = new Intent(MainActivity.this, SettingsActivity.class);
+    		MainActivity.this.startActivity(myIntent);
+    		return true;
+    	default:
+    		return super.onOptionsItemSelected(item);
+    	}
+    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
@@ -40,6 +58,11 @@ public class MainActivity extends Activity implements OnDateChangedListener{
     	datePicker = (DatePicker) findViewById(R.id.datePicker);
     	datePicker.setSpinnersShown(true);
  		datePicker.setCalendarViewShown(false);
+ 		
+ 		inDayPicker = (NumberPicker) findViewById(R.id.inDayPicker);
+ 		inDayPicker.setMinValue(0);
+ 		inDayPicker.setMaxValue(1);
+ 		inDayPicker.setDisplayedValues( new String[] { "AM", "PM" } );
  		
  		image = (ImageView) findViewById(R.id.resultImageView);
     }

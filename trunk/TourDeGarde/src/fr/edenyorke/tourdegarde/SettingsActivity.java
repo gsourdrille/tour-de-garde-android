@@ -1,13 +1,13 @@
 package fr.edenyorke.tourdegarde;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import fr.edenyorke.tourdegarde.bean.Constantes;
 import fr.edenyorke.tourdegarde.bean.Garde;
+import fr.edenyorke.tourdegarde.dialog.CustomDatePickerDialog;
 import fr.edenyorke.tourdegarde.utils.DateUtils;
 import fr.edenyorke.tourdegarde.utils.FilesUtils;
 
@@ -80,6 +81,8 @@ public class SettingsActivity extends Activity implements OnClickListener{
     	dateFinBouton = (LinearLayout)findViewById(R.id.dateFinBouton);
     	periodeBouton = (LinearLayout)findViewById(R.id.periodeBouton);
     	estPeriodeBouton = (LinearLayout)findViewById(R.id.estPeriodeBouton);
+    	dateDebutValue = (TextView) findViewById(R.id.dateDebutValue);
+    	dateFinValue = (TextView) findViewById(R.id.dateFinValue);
     }
     
     /**
@@ -99,6 +102,22 @@ public class SettingsActivity extends Activity implements OnClickListener{
 	                    .get(Calendar.YEAR), dateDebutCalendar.get(Calendar.MONTH),
 	                    dateDebutCalendar.get(Calendar.DAY_OF_MONTH)).show();
 		}else if(v == dateFinBouton){
+			CustomDatePickerDialog dialog = new CustomDatePickerDialog(this) {
+				@Override
+				public void onClick(View v) {
+					 int day = getDatePicker().getDayOfMonth();
+					 int month = getDatePicker().getMonth() ;
+					 int year = getDatePicker().getYear();
+					 dateDebutCalendar.set(Calendar.DAY_OF_MONTH, day);
+					 dateDebutCalendar.set(Calendar.MONTH, month);
+					 dateDebutCalendar.set(Calendar.YEAR, year);
+					 Date result = dateDebutCalendar.getTime();
+					 String resultString = DateUtils.formatDate(result);
+					 dateFinValue.setText(resultString);
+					 dismiss();
+				}
+			};
+			dialog.show();
 			
 		}else if(v == periodeBouton){
 			
@@ -124,13 +143,12 @@ public class SettingsActivity extends Activity implements OnClickListener{
 	private void initValues(){
 		
 		Garde garde = (Garde) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
+		dateDebutCalendar = Calendar.getInstance();
+		dateFinCalendar = Calendar.getInstance();
 		if(garde == null){
 			garde = new Garde();
 		}else{
-			dateDebutCalendar = Calendar.getInstance();
 			dateDebutCalendar.setTime(DateUtils.parseDate( garde.getDateDebut()));
-			
-			dateFinCalendar = Calendar.getInstance();
 			dateFinCalendar.setTime(DateUtils.parseDate( garde.getDateFin()));
 		}
 		
