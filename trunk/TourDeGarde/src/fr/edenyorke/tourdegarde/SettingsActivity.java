@@ -98,26 +98,25 @@ public class SettingsActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		if(v == dateDebutBouton) {
-			 new DatePickerDialog(SettingsActivity.this, dateDebutListener, dateDebutCalendar
-	                    .get(Calendar.YEAR), dateDebutCalendar.get(Calendar.MONTH),
-	                    dateDebutCalendar.get(Calendar.DAY_OF_MONTH)).show();
-		}else if(v == dateFinBouton){
-			CustomDatePickerDialog dialog = new CustomDatePickerDialog(this) {
+			CustomDatePickerDialog customDatePickerDialog = new CustomDatePickerDialog(this, dateDebutCalendar) {
 				@Override
-				public void onClick(View v) {
-					 int day = getDatePicker().getDayOfMonth();
-					 int month = getDatePicker().getMonth() ;
-					 int year = getDatePicker().getYear();
-					 dateDebutCalendar.set(Calendar.DAY_OF_MONTH, day);
-					 dateDebutCalendar.set(Calendar.MONTH, month);
-					 dateDebutCalendar.set(Calendar.YEAR, year);
-					 Date result = dateDebutCalendar.getTime();
-					 String resultString = DateUtils.formatDate(result);
-					 dateFinValue.setText(resultString);
-					 dismiss();
+				public void getValue() {
+					dateDebutCalendar = getCalendar();
+					updateDateDebut();
+					dismiss();
 				}
 			};
-			dialog.show();
+			customDatePickerDialog.show();
+		}else if(v == dateFinBouton){
+			CustomDatePickerDialog customDatePickerDialog = new CustomDatePickerDialog(this, dateFinCalendar) {
+				@Override
+				public void getValue() {
+					dateFinCalendar = getCalendar();
+					updateDateFin();
+					dismiss();
+				}
+			};
+			customDatePickerDialog.show();
 			
 		}else if(v == periodeBouton){
 			
@@ -154,6 +153,24 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		
 		
 		
+	}
+	
+	private void updateValues(){
+		updateDateDebut();
+		updateDateFin();
+ 
+	}
+	
+	private void updateDateDebut(){
+		 Date dateDebut = dateDebutCalendar.getTime();
+		 String dateDebutString = DateUtils.formatDate(dateDebut);
+		 dateDebutValue.setText(dateDebutString);
+	}
+	
+	private void updateDateFin(){
+		Date dateFin = dateFinCalendar.getTime();
+		 String dateFinString = DateUtils.formatDate(dateFin);
+		 dateFinValue.setText(dateFinString);
 	}
 
 }
