@@ -13,8 +13,8 @@ public class Garde implements Serializable  {
 	private String dateDebut;
 	private String dateFin;
 	private boolean estPeriodeDeGarde;
-	private TypePeriode typePeriode;
-	private int valeurPeriode;
+	private Periode periode;
+
 	
 	
 	public String getName() {
@@ -41,19 +41,12 @@ public class Garde implements Serializable  {
 	public void setEstPeriodeDeGarde(boolean estPeriodeDeGarde) {
 		this.estPeriodeDeGarde = estPeriodeDeGarde;
 	}
-	public TypePeriode getTypePeriode() {
-		return typePeriode;
+	public Periode getPeriode() {
+		return periode;
 	}
-	public void setTypePeriode(TypePeriode typePeriode) {
-		this.typePeriode = typePeriode;
+	public void setPeriode(Periode periode) {
+		this.periode = periode;
 	}
-	public int getValeurPeriode() {
-		return valeurPeriode;
-	}
-	public void setValeurPeriode(int valeurPeriode) {
-		this.valeurPeriode = valeurPeriode;
-	}
-	
 	
 	
 	

@@ -4,7 +4,10 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
@@ -26,6 +29,15 @@ public class MainActivity extends Activity implements OnDateChangedListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        		);
+        
         setContentView(R.layout.activity_main);
         initView();
         setCurrentDateOnView();
