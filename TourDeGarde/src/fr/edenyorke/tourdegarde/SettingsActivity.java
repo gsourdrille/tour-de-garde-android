@@ -17,7 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import fr.edenyorke.tourdegarde.bean.Constantes;
 import fr.edenyorke.tourdegarde.bean.Garde;
+import fr.edenyorke.tourdegarde.bean.Periode;
 import fr.edenyorke.tourdegarde.dialog.CustomDatePickerDialog;
+import fr.edenyorke.tourdegarde.dialog.CustomPeriodePickerDialog;
 import fr.edenyorke.tourdegarde.utils.DateUtils;
 import fr.edenyorke.tourdegarde.utils.FilesUtils;
 
@@ -33,6 +35,7 @@ public class SettingsActivity extends Activity implements OnClickListener{
 	private TextView estPeriodeValue;
 	private Calendar dateDebutCalendar;
 	private Calendar dateFinCalendar;
+	private Periode periode;
 	
 	
 	 /** Called when the activity is first created. */
@@ -119,7 +122,15 @@ public class SettingsActivity extends Activity implements OnClickListener{
 			customDatePickerDialog.show();
 			
 		}else if(v == periodeBouton){
-			
+			CustomPeriodePickerDialog customPeriodePickerDialog = new CustomPeriodePickerDialog(this, periode) {
+				@Override
+				public void getValue() {
+					periode = getPeriode();
+					updatePeriode();
+					dismiss();
+				}
+			};
+			customPeriodePickerDialog.show();
 		}else if(v == estPeriodeBouton){
 			
 		}
@@ -149,6 +160,7 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		}else{
 			dateDebutCalendar.setTime(DateUtils.parseDate( garde.getDateDebut()));
 			dateFinCalendar.setTime(DateUtils.parseDate( garde.getDateFin()));
+			periode = garde.getPeriode();
 		}
 		
 		
@@ -158,6 +170,7 @@ public class SettingsActivity extends Activity implements OnClickListener{
 	private void updateValues(){
 		updateDateDebut();
 		updateDateFin();
+		updatePeriode();
  
 	}
 	
@@ -171,6 +184,23 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		Date dateFin = dateFinCalendar.getTime();
 		 String dateFinString = DateUtils.formatDate(dateFin);
 		 dateFinValue.setText(dateFinString);
+	}
+	
+	private void updatePeriode(){
+		String typePeriode = "";
+		switch(periode.getTypePeriode()){
+		case WEEK:
+			typePeriode = "1 semaine sur";
+			break;
+		case MONTH:
+			typePeriode = "1 mois sur";
+			break;
+		case TIMES:
+			typePeriode = "1 fois sur";
+			break;
+		}
+		String title = typePeriode + " " + String.valueOf(periode.getNumberPeriode()) ;
+		periodeValue.setText(title);
 	}
 
 }

@@ -1,8 +1,15 @@
 package fr.edenyorke.tourdegarde.bean;
 
+import java.io.Serializable;
 
-public class Periode {
+
+public class Periode implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1298502534727583317L;
+
 	private TypePeriode typePeriode;
 	
 	private int numberPeriode;
