@@ -2,6 +2,7 @@ package fr.edenyorke.tourdegarde.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
@@ -37,6 +38,7 @@ public abstract class CustomPeriodePickerDialog extends Dialog implements androi
 			break;
 		case MONTH:
 			typePeriodePicker.setValue(1);
+			break;
 		case TIMES:
 			typePeriodePicker.setValue(2);
 			break;
@@ -56,6 +58,7 @@ public abstract class CustomPeriodePickerDialog extends Dialog implements androi
  		saveButton = (Button) findViewById(R.id.buttonSave);
  		saveButton.setOnClickListener(this);
  		
+ 		updateTitle();
 	}
 
 	@Override
@@ -70,7 +73,6 @@ public abstract class CustomPeriodePickerDialog extends Dialog implements androi
 
 	private void getPickerValue() {
 		
-		Periode periode = new Periode();
 		
 		switch (typePeriodePicker.getValue()) {
 		case 0:

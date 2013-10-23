@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 
 public class MainActivity extends Activity implements OnDateChangedListener{
@@ -29,15 +30,6 @@ public class MainActivity extends Activity implements OnDateChangedListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        		);
-        
         setContentView(R.layout.activity_main);
         initView();
         setCurrentDateOnView();
