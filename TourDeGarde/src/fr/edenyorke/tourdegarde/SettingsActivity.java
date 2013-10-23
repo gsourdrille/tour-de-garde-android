@@ -36,6 +36,7 @@ public class SettingsActivity extends Activity implements OnClickListener{
 	private Calendar dateDebutCalendar;
 	private Calendar dateFinCalendar;
 	private Periode periode;
+	boolean isPeriode;
 	
 	
 	 /** Called when the activity is first created. */
@@ -86,6 +87,8 @@ public class SettingsActivity extends Activity implements OnClickListener{
     	estPeriodeBouton = (LinearLayout)findViewById(R.id.estPeriodeBouton);
     	dateDebutValue = (TextView) findViewById(R.id.dateDebutValue);
     	dateFinValue = (TextView) findViewById(R.id.dateFinValue);
+    	periodeValue = (TextView) findViewById(R.id.periodeValue);
+    	estPeriodeValue = (TextView) findViewById(R.id.estPeriodeValue);
     }
     
     /**
@@ -132,7 +135,8 @@ public class SettingsActivity extends Activity implements OnClickListener{
 			};
 			customPeriodePickerDialog.show();
 		}else if(v == estPeriodeBouton){
-			
+			isPeriode = !isPeriode;
+			updateEstPeriode();
 		}
 		
 	}
@@ -155,12 +159,21 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		Garde garde = (Garde) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
 		dateDebutCalendar = Calendar.getInstance();
 		dateFinCalendar = Calendar.getInstance();
+		periode = new Periode();
+		isPeriode = true;
+		dateDebutValue.setText("Non définie");
+		dateFinValue.setText("Non définie");
+		periodeValue.setText("Non définie");
+		updateEstPeriode();
 		if(garde == null){
 			garde = new Garde();
+			
 		}else{
 			dateDebutCalendar.setTime(DateUtils.parseDate( garde.getDateDebut()));
 			dateFinCalendar.setTime(DateUtils.parseDate( garde.getDateFin()));
 			periode = garde.getPeriode();
+			isPeriode = garde.isEstPeriodeDeGarde();
+			updateValues();
 		}
 		
 		
@@ -171,7 +184,7 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		updateDateDebut();
 		updateDateFin();
 		updatePeriode();
- 
+		updateEstPeriode();
 	}
 	
 	private void updateDateDebut(){
@@ -184,6 +197,16 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		Date dateFin = dateFinCalendar.getTime();
 		 String dateFinString = DateUtils.formatDate(dateFin);
 		 dateFinValue.setText(dateFinString);
+	}
+	
+	private void updateEstPeriode(){
+		 String estPeriodeString = "";
+		 if(isPeriode){
+			 estPeriodeString = "Oui";
+		 }else{
+			 estPeriodeString = "Non";
+		 }
+		 estPeriodeValue.setText(estPeriodeString);
 	}
 	
 	private void updatePeriode(){
