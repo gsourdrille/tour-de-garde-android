@@ -1,5 +1,6 @@
 package fr.edenyorke.tourdegarde;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -30,6 +32,7 @@ import fr.edenyorke.tourdegarde.dialog.CustomDatePickerDialog;
 import fr.edenyorke.tourdegarde.dialog.CustomPeriodePickerDialog;
 import fr.edenyorke.tourdegarde.utils.DateUtils;
 import fr.edenyorke.tourdegarde.utils.FilesUtils;
+import fr.edenyorke.tourdegarde.utils.StringUtils;
 
 public class EditGardeActivity extends Activity implements OnClickListener,OnKeyListener{
 	
@@ -45,12 +48,14 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 	private Button buttonAnnuler;
 	private Button buttonSauver;
 	private Button buttonSupprimer;
+	private CheckBox boutonAfficherPeriode;
 	private TextView nameValue;
 	private EditText nameEditValue;
 	private Calendar dateDebutCalendar;
 	private Calendar dateFinCalendar;
 	private Periode periode;
 	private boolean isPeriode;
+	private boolean afficherPeriode;
 	private String name;
 	private String currentId;
 	
@@ -102,6 +107,7 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
     	periodeBouton = (LinearLayout)findViewById(R.id.periodeBouton);
     	estPeriodeBouton = (LinearLayout)findViewById(R.id.estPeriodeBouton);
     	nameBouton = (LinearLayout)findViewById(R.id.nameBouton);
+    	
     	dateDebutValue = (TextView) findViewById(R.id.dateDebutValue);
     	dateFinValue = (TextView) findViewById(R.id.dateFinValue);
     	periodeValue = (TextView) findViewById(R.id.periodeValue);
@@ -111,6 +117,10 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
     	buttonAnnuler = (Button) findViewById(R.id.buttonCancel);
     	buttonSauver = (Button) findViewById(R.id.buttonSave);
     	buttonSupprimer = (Button) findViewById(R.id.buttonDelete);
+    	nameBouton.removeView(nameEditValue);
+    	
+    	boutonAfficherPeriode = (CheckBox) findViewById(R.id.boutonAfficherPeriode);
+
     }
     
     /**
@@ -165,7 +175,6 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 			isPeriode = !isPeriode;
 			updateEstPeriode();
 		}else if(v == nameBouton){
-				nameBouton.removeView(nameEditValue);
 				nameBouton.removeView(nameValue);
 				nameEditValue.setText(name);
 				nameEditValue.setFocusable(true);
@@ -200,14 +209,18 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 	
 	private void initValues(){
 		
-		Garde garde = (Garde) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
+		Garde garde = null;
+		List<Garde> listegarde = (List<Garde>) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
+		if(listegarde != null){
+			garde = listegarde.get(0);
+		}
 		dateDebutCalendar = Calendar.getInstance();
 		dateFinCalendar = Calendar.getInstance();
 		periode = new Periode();
 		isPeriode = true;
-		dateDebutValue.setText("Non définie");
-		dateFinValue.setText("Non définie");
-		periodeValue.setText("Non définie");
+		dateDebutValue.setText(R.string.nondefinie);
+		dateFinValue.setText(R.string.nondefinie);
+		periodeValue.setText(R.string.nondefinie);
 		updateEstPeriode();
 		if(garde != null){
 			dateDebutCalendar.setTime(garde.getDateDebut());
@@ -273,6 +286,9 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 	
 	private void save(){
 		List<Garde> listeGarde = (List<Garde>) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
+		if(listeGarde==null){
+			listeGarde = new ArrayList<Garde>();
+		}
 		if(currentId != null){
 			//TODO modification
 			Garde gardeEdit = null;
@@ -303,6 +319,7 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 		garde.setDateFin(dateFinCalendar.getTime());
 		garde.setPeriode(periode);
 		garde.setEstPeriodeDeGarde(isPeriode);
+		garde.setName(name);
 	}
 
 	@Override
@@ -320,6 +337,15 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 		    }
 		    // Returning false allows other listeners to react to the press.
 		    return false;
+	}
+	
+	private List<String> validateGarde(){
+		List<String> erreurs = new ArrayList<String>();
+		if(StringUtils.isEmpty(name)){
+			//erreurs.add(object)
+		}
+		
+		return erreurs;
 	}
 
 }

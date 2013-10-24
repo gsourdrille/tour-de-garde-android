@@ -16,14 +16,14 @@
         android:clickable="true"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="0.00" 
         android:gravity="center_vertical"
         android:background="@drawable/layout_selector">
 
         <TextView
             android:id="@+id/nameText"
-            android:layout_width="92dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="@string/nameText"
@@ -31,19 +31,25 @@
 
         <EditText
             android:id="@+id/nameEditValue"
-            android:layout_width="wrap_content"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:singleLine="true"
             android:textColor="@color/black" 
-            android:visibility="invisible"
-            android:singleLine="true"/>
+            >
+
+            <requestFocus />
+        </EditText>
+
          <TextView
             android:id="@+id/nameValue"
-            android:layout_width="120dp"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black" 
-            android:visibility="visible"
-            android:gravity="right">
+            android:gravity="right"
+            android:scrollHorizontally="true"
+			android:ellipsize="end"
+			android:maxLines="1">
         </TextView>
 
     </LinearLayout>
@@ -103,6 +109,61 @@
             android:gravity="right"/>
        
     </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/estPeriodeBouton"
+        android:clickable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="0.00" 
+        android:gravity="center_vertical"
+        android:background="@drawable/layout_selector">
+
+        <TextView
+            android:id="@+id/estPeriodeText"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:text="@string/estPeriodeText"
+             android:layout_marginLeft="10dp"
+            android:textColor="@color/black" />
+         <TextView
+            android:id="@+id/estPeriodeValue"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text=""
+             android:layout_marginLeft="10dp"
+            android:textColor="@color/black" 
+            android:gravity="right"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp" >
+
+        
+
+        <TextView
+            android:id="@+id/afficherPeriodeText"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/boutonAfficherPeriode"
+            android:layout_alignBottom="@+id/boutonAfficherPeriode"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="13dp"
+            android:text="@string/afficherPeriode"
+            android:textColor="@color/white" />
+        
+        <CheckBox
+            android:id="@+id/boutonAfficherPeriode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:button="@drawable/checkbox" />
+
+    </RelativeLayout>
+    
     <LinearLayout
         android:id="@+id/periodeBouton"
         android:clickable="true"
@@ -130,67 +191,39 @@
             android:gravity="right"/>
        
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/estPeriodeBouton"
-        android:clickable="true"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="0.00" 
-        android:gravity="center_vertical"
-        android:background="@drawable/layout_selector">
 
-        <TextView
-            android:id="@+id/estPeriodeText"
-            android:layout_width="230dp"
-            android:layout_height="wrap_content"
-            android:text="@string/estPeriodeText"
-             android:layout_marginLeft="10dp"
-            android:textColor="@color/black" />
-         <TextView
-            android:id="@+id/estPeriodeValue"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:text=""
-             android:layout_marginLeft="10dp"
-            android:textColor="@color/black" 
-            android:gravity="right"/>
-    </LinearLayout>
-    
-     <RelativeLayout
+    <RelativeLayout
         android:layout_width="300dp"
         android:layout_height="40dp"
         android:layout_marginTop="40dp"
-        android:layout_weight="0.00" 
-        >
+        android:layout_weight="0.00" >
 
-         <Button
-             android:id="@+id/buttonCancel"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="Annuler" 
-             android:layout_gravity="left"
-             android:background="@drawable/layout_selector"
-             android:layout_alignParentLeft="true"/>
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:background="@drawable/layout_selector"
+            android:text="@string/boutonSauver" />
 
-         <Button
-             android:id="@+id/buttonSave"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="Sauver" 
-             android:layout_gravity="center"
-             android:background="@drawable/layout_selector" 
-             android:layout_centerInParent="true"/>
+        <Button
+            android:id="@+id/buttonDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:background="@drawable/layout_selector"
+            android:text="@string/boutonSupprimer" />
 
-         <Button
-             android:id="@+id/buttonDelete"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="Supprimer" 
-             android:layout_gravity="right"
-             android:background="@drawable/layout_selector" 
-             android:layout_alignParentRight="true"/>
-        
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/layout_selector"
+            android:text="@string/boutonAnnuler" />
     </RelativeLayout>
 
 </LinearLayout>
