@@ -12,11 +12,47 @@
     tools:context=".Settings" >
 
     <LinearLayout
-        android:id="@+id/dateDebutBouton"
+        android:id="@+id/nameBouton"
         android:clickable="true"
         android:layout_width="300dp"
         android:layout_height="40dp"
         android:layout_marginTop="100dp"
+        android:layout_weight="0.00" 
+        android:gravity="center_vertical"
+        android:background="@drawable/layout_selector">
+
+        <TextView
+            android:id="@+id/nameText"
+            android:layout_width="92dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/nameText"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/nameEditValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textColor="@color/black" 
+            android:visibility="invisible"
+            android:singleLine="true"/>
+         <TextView
+            android:id="@+id/nameValue"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black" 
+            android:visibility="visible">
+        </TextView>
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/dateDebutBouton"
+        android:clickable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="0.00" 
         android:gravity="center_vertical"
         android:background="@drawable/layout_selector">
@@ -27,14 +63,14 @@
             android:layout_height="wrap_content"
             android:text="@string/dateDebutText"
             android:layout_marginLeft="10dp"
-            android:textColor="#000000" />
+            android:textColor="@color/black" />
         <TextView
             android:id="@+id/dateDebutValue"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text=""
             android:layout_marginLeft="10dp"
-            android:textColor="#000000" 
+            android:textColor="@color/black" 
             android:gravity="right"/>
 
     </LinearLayout>
@@ -55,14 +91,14 @@
             android:layout_height="wrap_content"
             android:text="@string/dateFinText"
             android:layout_marginLeft="10dp"
-            android:textColor="#000000" />
+            android:textColor="@color/black" />
         <TextView
             android:id="@+id/dateFinValue"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
              android:text=""
             android:layout_marginLeft="10dp"
-            android:textColor="#000000" 
+            android:textColor="@color/black" 
             android:gravity="right"/>
        
     </LinearLayout>
@@ -82,14 +118,14 @@
             android:layout_height="wrap_content"
             android:text="@string/periodeText"
             android:layout_marginLeft="10dp"
-            android:textColor="#000000" />
+            android:textColor="@color/black" />
  	<TextView
             android:id="@+id/periodeValue"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text=""
             android:layout_marginLeft="10dp"
-            android:textColor="#000000" 
+            android:textColor="@color/black" 
             android:gravity="right"/>
        
     </LinearLayout>
@@ -109,15 +145,51 @@
             android:layout_height="wrap_content"
             android:text="@string/estPeriodeText"
              android:layout_marginLeft="10dp"
-            android:textColor="#000000" />
+            android:textColor="@color/black" />
          <TextView
             android:id="@+id/estPeriodeValue"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:text=""
              android:layout_marginLeft="10dp"
-            android:textColor="#000000" 
+            android:textColor="@color/black" 
             android:gravity="right"/>
     </LinearLayout>
+    
+     <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_weight="0.00" 
+        >
+
+         <Button
+             android:id="@+id/buttonCancel"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Annuler" 
+             android:layout_gravity="left"
+             android:background="@drawable/layout_selector"
+             android:layout_alignParentLeft="true"/>
+
+         <Button
+             android:id="@+id/buttonSave"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Sauver" 
+             android:layout_gravity="center"
+             android:background="@drawable/layout_selector" 
+             android:layout_centerInParent="true"/>
+
+         <Button
+             android:id="@+id/buttonDelete"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Supprimer" 
+             android:layout_gravity="right"
+             android:background="@drawable/layout_selector" 
+             android:layout_alignParentRight="true"/>
+        
+    </RelativeLayout>
 
 </LinearLayout>

@@ -2,17 +2,25 @@ package fr.edenyorke.tourdegarde;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import fr.edenyorke.tourdegarde.bean.Constantes;
@@ -23,20 +31,28 @@ import fr.edenyorke.tourdegarde.dialog.CustomPeriodePickerDialog;
 import fr.edenyorke.tourdegarde.utils.DateUtils;
 import fr.edenyorke.tourdegarde.utils.FilesUtils;
 
-public class SettingsActivity extends Activity implements OnClickListener{
+public class EditGardeActivity extends Activity implements OnClickListener,OnKeyListener{
 	
 	private LinearLayout dateDebutBouton;
 	private LinearLayout dateFinBouton;
 	private LinearLayout periodeBouton;
 	private LinearLayout estPeriodeBouton;
+	private LinearLayout nameBouton;
 	private TextView dateDebutValue;
 	private TextView dateFinValue;
 	private TextView periodeValue;
 	private TextView estPeriodeValue;
+	private Button buttonAnnuler;
+	private Button buttonSauver;
+	private Button buttonSupprimer;
+	private TextView nameValue;
+	private EditText nameEditValue;
 	private Calendar dateDebutCalendar;
 	private Calendar dateFinCalendar;
 	private Periode periode;
-	boolean isPeriode;
+	private boolean isPeriode;
+	private String name;
+	private String currentId;
 	
 	
 	 /** Called when the activity is first created. */
@@ -44,7 +60,7 @@ public class SettingsActivity extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.settings);
+        setContentView(R.layout.edit_garde_layout);
 
         // Get IHM Components
         initScreenComponent();
@@ -85,10 +101,16 @@ public class SettingsActivity extends Activity implements OnClickListener{
     	dateFinBouton = (LinearLayout)findViewById(R.id.dateFinBouton);
     	periodeBouton = (LinearLayout)findViewById(R.id.periodeBouton);
     	estPeriodeBouton = (LinearLayout)findViewById(R.id.estPeriodeBouton);
+    	nameBouton = (LinearLayout)findViewById(R.id.nameBouton);
     	dateDebutValue = (TextView) findViewById(R.id.dateDebutValue);
     	dateFinValue = (TextView) findViewById(R.id.dateFinValue);
     	periodeValue = (TextView) findViewById(R.id.periodeValue);
     	estPeriodeValue = (TextView) findViewById(R.id.estPeriodeValue);
+    	nameValue = (TextView) findViewById(R.id.nameValue);
+    	nameEditValue = (EditText) findViewById(R.id.nameEditValue);
+    	buttonAnnuler = (Button) findViewById(R.id.buttonCancel);
+    	buttonSauver = (Button) findViewById(R.id.buttonSave);
+    	buttonSupprimer = (Button) findViewById(R.id.buttonDelete);
     }
     
     /**
@@ -99,6 +121,11 @@ public class SettingsActivity extends Activity implements OnClickListener{
     	dateFinBouton.setOnClickListener(this);
     	periodeBouton.setOnClickListener(this);
     	estPeriodeBouton.setOnClickListener(this);
+    	nameBouton.setOnClickListener(this);
+    	buttonAnnuler.setOnClickListener(this);
+    	buttonSauver.setOnClickListener(this);
+    	buttonSupprimer.setOnClickListener(this);
+    	nameEditValue.setOnKeyListener(this);
     }
 
 	@Override
@@ -137,6 +164,23 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		}else if(v == estPeriodeBouton){
 			isPeriode = !isPeriode;
 			updateEstPeriode();
+		}else if(v == nameBouton){
+				nameEditValue.setText(name);
+				nameEditValue.setVisibility(View.VISIBLE);
+				nameEditValue.setFocusable(true);
+				nameEditValue.requestFocus();
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+				nameBouton.removeView(nameBouton);
+	            nameValue.setVisibility(View.INVISIBLE);
+				updateEstPeriode();
+		}else if(v == buttonAnnuler){
+			onBackPressed();
+		}else if(v== buttonSauver){
+			save();
+			onBackPressed();
+		}else if(v == buttonSupprimer){
+			//TODO supprimer
 		}
 		
 	}
@@ -165,19 +209,15 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		dateFinValue.setText("Non définie");
 		periodeValue.setText("Non définie");
 		updateEstPeriode();
-		if(garde == null){
-			garde = new Garde();
-			
-		}else{
-			dateDebutCalendar.setTime(DateUtils.parseDate( garde.getDateDebut()));
-			dateFinCalendar.setTime(DateUtils.parseDate( garde.getDateFin()));
+		if(garde != null){
+			dateDebutCalendar.setTime(garde.getDateDebut());
+			dateFinCalendar.setTime(garde.getDateFin());
 			periode = garde.getPeriode();
 			isPeriode = garde.isEstPeriodeDeGarde();
+			name = garde.getName();
+			currentId = garde.getId();
 			updateValues();
 		}
-		
-		
-		
 	}
 	
 	private void updateValues(){
@@ -185,6 +225,7 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		updateDateFin();
 		updatePeriode();
 		updateEstPeriode();
+		updateName();
 	}
 	
 	private void updateDateDebut(){
@@ -209,6 +250,10 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		 estPeriodeValue.setText(estPeriodeString);
 	}
 	
+	private void updateName(){
+		 nameValue.setText(name);
+	}
+	
 	private void updatePeriode(){
 		String typePeriode = "";
 		switch(periode.getTypePeriode()){
@@ -224,6 +269,58 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		}
 		String title = typePeriode + " " + String.valueOf(periode.getNumberPeriode()) ;
 		periodeValue.setText(title);
+	}
+	
+	private void save(){
+		List<Garde> listeGarde = (List<Garde>) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
+		if(currentId != null){
+			//TODO modification
+			Garde gardeEdit = null;
+			int index = -1;
+			while (index < listeGarde.size() && gardeEdit == null) {
+				index++;
+				Garde garde = listeGarde.get(index);
+				if (garde.getId().equals(currentId)){
+					gardeEdit = garde;
+				}
+				
+			}
+			populateGarde(gardeEdit);
+			listeGarde.remove(index);
+			listeGarde.add(index, gardeEdit);
+			FilesUtils.saveOnSdCard(listeGarde, Constantes.PATH_DATA);
+		}else{
+			Garde garde = new Garde();
+			garde.setId(UUID.randomUUID().toString());
+			populateGarde(garde);
+			listeGarde.add(garde);
+			FilesUtils.saveOnSdCard(listeGarde, Constantes.PATH_DATA);
+		}
+		
+	}
+	private void populateGarde(Garde garde) {
+		garde.setDateDebut(dateDebutCalendar.getTime());
+		garde.setDateFin(dateFinCalendar.getTime());
+		garde.setPeriode(periode);
+		garde.setEstPeriodeDeGarde(isPeriode);
+	}
+
+	@Override
+	public boolean onKey(View arg0, int keyCode, KeyEvent event) {
+		if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+		        (keyCode == KeyEvent.KEYCODE_ENTER))
+		    {
+			nameBouton.removeView(nameEditValue);
+			nameEditValue.setVisibility(View.INVISIBLE);
+			nameBouton.addView(nameValue);
+			nameValue.setVisibility(View.VISIBLE);
+			name = nameEditValue.getText().toString();
+			nameValue.setText(name);
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+		    }
+		    // Returning false allows other listeners to react to the press.
+		    return false;
 	}
 
 }
