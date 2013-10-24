@@ -9,6 +9,7 @@
 	<string name="dateFinText">Fin de la garde :</string>
 	<string name="periodeText">Périodicité :</string>
 	<string name="estPeriodeText">Est une période de garde :</string>
+	<string name="nameText">Nom :</string>
 	
 	<string name="oui">Oui</string>
 	<string name="non">Non</string>

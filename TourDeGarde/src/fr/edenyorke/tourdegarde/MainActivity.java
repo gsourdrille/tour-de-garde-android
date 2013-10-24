@@ -43,7 +43,7 @@ public class MainActivity extends Activity implements OnDateChangedListener{
 			onBackPressed();
 			return true;
     	case R.id.menu_settings:
-    		Intent myIntent = new Intent(MainActivity.this, SettingsActivity.class);
+    		Intent myIntent = new Intent(MainActivity.this, EditGardeActivity.class);
     		MainActivity.this.startActivity(myIntent);
     		return true;
     	default:
