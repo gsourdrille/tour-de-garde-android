@@ -165,14 +165,14 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 			isPeriode = !isPeriode;
 			updateEstPeriode();
 		}else if(v == nameBouton){
+				nameBouton.removeView(nameEditValue);
+				nameBouton.removeView(nameValue);
 				nameEditValue.setText(name);
-				nameEditValue.setVisibility(View.VISIBLE);
 				nameEditValue.setFocusable(true);
 				nameEditValue.requestFocus();
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 	            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-				nameBouton.removeView(nameBouton);
-	            nameValue.setVisibility(View.INVISIBLE);
+				nameBouton.addView(nameEditValue);
 				updateEstPeriode();
 		}else if(v == buttonAnnuler){
 			onBackPressed();
@@ -311,9 +311,8 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 		        (keyCode == KeyEvent.KEYCODE_ENTER))
 		    {
 			nameBouton.removeView(nameEditValue);
-			nameEditValue.setVisibility(View.INVISIBLE);
+			nameBouton.removeView(nameValue);
 			nameBouton.addView(nameValue);
-			nameValue.setVisibility(View.VISIBLE);
 			name = nameEditValue.getText().toString();
 			nameValue.setText(name);
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
