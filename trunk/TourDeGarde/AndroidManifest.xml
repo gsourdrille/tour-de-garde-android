@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="fr.edenyorke.tourdegarde.SettingsActivity"
+        <activity android:name="fr.edenyorke.tourdegarde.EditGardeActivity"
 		    android:windowSoftInputMode="stateHidden">"
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
