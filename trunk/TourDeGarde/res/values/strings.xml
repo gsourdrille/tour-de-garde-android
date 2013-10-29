@@ -28,4 +28,10 @@
 	
 	<string name="confirme_title">Suppression</string>
 	<string name="confirme_message">Voulez vous vraiment supprimer cette garde ?</string>
+
+	<string name="ajout_garde_ok">La garde %1$s a été ajoutée</string>
+	<string name="edit_garde_ok">La garde %1$s a été modifiée</string>
+	<string name="delete_garde_ok">La garde %1$s a été supprimée</string>
+	
+	<string name="avec_periode">Avec période</string>	
 </resources>
