@@ -26,7 +26,11 @@ public abstract class CustomDatePickerDialog extends Dialog implements android.v
 		setContentView(R.layout.custom_datepicker_dialog);
 		setCancelable(true);
 		
-		calendar = currentDate;
+		if(currentDate == null){
+			calendar = Calendar.getInstance();
+		}else{
+			calendar = currentDate;
+		}
 		
 		datePicker = (DatePicker) findViewById(R.id.customDatePicker);
     	datePicker.setSpinnersShown(true);

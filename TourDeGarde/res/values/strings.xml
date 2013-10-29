@@ -19,9 +19,13 @@
 	<string name="non">Non</string>
 	<string name="nondefinie">Non définie</string>
 	
+	<string name="erreur_title">Erreurs</string>
 	<string name="erreur_nom_vide">Le nom doit être renseigné</string>
 	<string name="erreur_datedebut_vide">La date de début doit être renseignée</string>
 	<string name="erreur_datefin_vide">La date de fin doit être renseignée</string>
 	<string name="erreur_datefin_before">La date de fin doit être après la date de début</string>
 	<string name="erreur_periode_vide">La periode doit être renseignée</string>
+	
+	<string name="confirme_title">Suppression</string>
+	<string name="confirme_message">Voulez vous vraiment supprimer cette garde ?</string>
 </resources>
