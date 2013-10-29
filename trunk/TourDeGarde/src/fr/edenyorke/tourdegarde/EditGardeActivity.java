@@ -8,8 +8,10 @@ import java.util.UUID;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -21,20 +23,24 @@ import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import fr.edenyorke.tourdegarde.bean.Constantes;
 import fr.edenyorke.tourdegarde.bean.Garde;
 import fr.edenyorke.tourdegarde.bean.Periode;
 import fr.edenyorke.tourdegarde.dialog.CustomDatePickerDialog;
 import fr.edenyorke.tourdegarde.dialog.CustomPeriodePickerDialog;
+import fr.edenyorke.tourdegarde.utils.CollectionUtils;
 import fr.edenyorke.tourdegarde.utils.DateUtils;
 import fr.edenyorke.tourdegarde.utils.FilesUtils;
 import fr.edenyorke.tourdegarde.utils.StringUtils;
 
-public class EditGardeActivity extends Activity implements OnClickListener,OnKeyListener{
+public class EditGardeActivity extends Activity implements OnClickListener,OnKeyListener, OnCheckedChangeListener{
 	
 	private LinearLayout dateDebutBouton;
 	private LinearLayout dateFinBouton;
@@ -117,6 +123,7 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
     	buttonAnnuler = (Button) findViewById(R.id.buttonCancel);
     	buttonSauver = (Button) findViewById(R.id.buttonSave);
     	buttonSupprimer = (Button) findViewById(R.id.buttonDelete);
+		buttonSupprimer.setVisibility(View.INVISIBLE);
     	nameBouton.removeView(nameEditValue);
     	
     	boutonAfficherPeriode = (CheckBox) findViewById(R.id.boutonAfficherPeriode);
@@ -136,6 +143,7 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
     	buttonSauver.setOnClickListener(this);
     	buttonSupprimer.setOnClickListener(this);
     	nameEditValue.setOnKeyListener(this);
+    	boutonAfficherPeriode.setOnCheckedChangeListener(this);
     }
 
 	@Override
@@ -186,10 +194,12 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 		}else if(v == buttonAnnuler){
 			onBackPressed();
 		}else if(v== buttonSauver){
-			save();
-			onBackPressed();
+			if(save()){
+				onBackPressed();
+			}
 		}else if(v == buttonSupprimer){
-			//TODO supprimer
+			delete();
+			//onBackPressed();
 		}
 		
 	}
@@ -207,29 +217,49 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 
 	};
 	
-	private void initValues(){
-		
-		Garde garde = null;
-		List<Garde> listegarde = (List<Garde>) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
-		if(listegarde != null){
-			garde = listegarde.get(0);
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if(isChecked){
+			periodeBouton.setVisibility(View.VISIBLE);
+			afficherPeriode = true;
+		}else{
+			periodeBouton.setVisibility(View.INVISIBLE);
+			afficherPeriode = false;
 		}
-		dateDebutCalendar = Calendar.getInstance();
-		dateFinCalendar = Calendar.getInstance();
-		periode = new Periode();
+	}
+	
+	private void initValues(){
+		Garde garde = null;
+		List<Garde> listeGarde = (List<Garde>) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
+		if(!CollectionUtils.isEmpty(listeGarde)){
+			garde = listeGarde.get(0);
+		}
+		dateDebutCalendar = null;
+		dateFinCalendar = null;
 		isPeriode = true;
 		dateDebutValue.setText(R.string.nondefinie);
 		dateFinValue.setText(R.string.nondefinie);
 		periodeValue.setText(R.string.nondefinie);
 		updateEstPeriode();
 		if(garde != null){
+			dateDebutCalendar = Calendar.getInstance();
+			dateFinCalendar = Calendar.getInstance();
 			dateDebutCalendar.setTime(garde.getDateDebut());
 			dateFinCalendar.setTime(garde.getDateFin());
 			periode = garde.getPeriode();
+			
 			isPeriode = garde.isEstPeriodeDeGarde();
 			name = garde.getName();
 			currentId = garde.getId();
 			updateValues();
+			buttonSupprimer.setVisibility(View.VISIBLE);
+		}
+		if(periode != null){
+			periodeBouton.setVisibility(View.VISIBLE);
+			afficherPeriode = true;
+		}else{
+			periodeBouton.setVisibility(View.INVISIBLE);
+			afficherPeriode = false;
 		}
 	}
 	
@@ -284,36 +314,102 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 		periodeValue.setText(title);
 	}
 	
-	private void save(){
-		List<Garde> listeGarde = (List<Garde>) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
-		if(listeGarde==null){
-			listeGarde = new ArrayList<Garde>();
-		}
-		if(currentId != null){
-			//TODO modification
-			Garde gardeEdit = null;
-			int index = -1;
-			while (index < listeGarde.size() && gardeEdit == null) {
-				index++;
-				Garde garde = listeGarde.get(index);
-				if (garde.getId().equals(currentId)){
-					gardeEdit = garde;
-				}
-				
+	private boolean save(){
+		List<String> erreurs = validateGarde();
+		if(!CollectionUtils.isEmpty(erreurs)){
+			String erreurMessage = "";
+			for(String erreur : erreurs){
+				erreurMessage += erreur +"\n";
 			}
-			populateGarde(gardeEdit);
-			listeGarde.remove(index);
-			listeGarde.add(index, gardeEdit);
-			FilesUtils.saveOnSdCard(listeGarde, Constantes.PATH_DATA);
+			
+			AlertDialog alertDialog = new AlertDialog.Builder(EditGardeActivity.this).create();
+			alertDialog.setTitle("Erreurs");
+			alertDialog.setMessage(erreurMessage);
+			alertDialog.show();
+			return false;
+	
 		}else{
-			Garde garde = new Garde();
-			garde.setId(UUID.randomUUID().toString());
-			populateGarde(garde);
-			listeGarde.add(garde);
-			FilesUtils.saveOnSdCard(listeGarde, Constantes.PATH_DATA);
+			List<Garde> listeGarde = (List<Garde>) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
+			if(listeGarde==null){
+				listeGarde = new ArrayList<Garde>();
+			}
+			if(currentId != null){
+				Garde gardeEdit = null;
+				int index = -1;
+				while (index < listeGarde.size() && gardeEdit == null) {
+					index++;
+					Garde garde = listeGarde.get(index);
+					if (garde.getId().equals(currentId)){
+						gardeEdit = garde;
+					}
+					
+				}
+				populateGarde(gardeEdit);
+				listeGarde.remove(index);
+				listeGarde.add(index, gardeEdit);
+				FilesUtils.saveOnSdCard(listeGarde, Constantes.PATH_DATA);
+			}else{
+				Garde garde = new Garde();
+				garde.setId(UUID.randomUUID().toString());
+				populateGarde(garde);
+				listeGarde.add(garde);
+				FilesUtils.saveOnSdCard(listeGarde, Constantes.PATH_DATA);
+			}
 		}
-		
+		return true;
 	}
+	
+	
+	private void delete(){
+			
+		new AlertDialog.Builder(this)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setTitle(R.string.confirme_title)
+        .setMessage(R.string.confirme_message)
+        .setPositiveButton(R.string.oui, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	processDelete();
+            }
+        })
+        .setNegativeButton(R.string.non, null)
+        .show();
+	}
+	
+	
+	private void processDelete() {
+		List<Garde> listeGarde = (List<Garde>) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
+		Garde gardeToDelete = null;
+		int index = -1;
+		while (index < listeGarde.size() && gardeToDelete == null) {
+			index++;
+			Garde garde = listeGarde.get(index);
+			if (garde.getId().equals(currentId)){
+				gardeToDelete = garde;
+			}
+			
+		}
+		if(gardeToDelete != null){
+			listeGarde.remove(index);
+		}
+		FilesUtils.saveOnSdCard(listeGarde, Constantes.PATH_DATA);
+		Toast.makeText(this, R.string.clear_cache, Toast.LENGTH_SHORT).show();
+		onBackPressed();
+	}
+	
+	private Garde findGarde(List<Garde> listeGarde){
+		Garde gardeToFind = null;
+		int index = -1;
+		while (index < listeGarde.size() && gardeToFind == null) {
+			index++;
+			Garde garde = listeGarde.get(index);
+			if (garde.getId().equals(currentId)){
+				gardeToFind = garde;
+			}
+		}
+		return gardeToFind;
+	}
+	
 	private void populateGarde(Garde garde) {
 		garde.setDateDebut(dateDebutCalendar.getTime());
 		garde.setDateFin(dateFinCalendar.getTime());
@@ -342,10 +438,24 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 	private List<String> validateGarde(){
 		List<String> erreurs = new ArrayList<String>();
 		if(StringUtils.isEmpty(name)){
-			//erreurs.add(object)
+			erreurs.add(getResources().getString(R.string.erreur_nom_vide));
+		}
+		if(dateDebutCalendar == null){
+			erreurs.add(getResources().getString(R.string.erreur_datedebut_vide));
+		}
+		if(dateFinCalendar == null){
+			erreurs.add(getResources().getString(R.string.erreur_datefin_vide));
+		}
+		if(dateDebutCalendar != null && dateFinCalendar != null && dateDebutCalendar.after(dateFinCalendar)){
+			erreurs.add(getResources().getString(R.string.erreur_datefin_before));
+		}
+		if(afficherPeriode && periode == null){
+			erreurs.add(getResources().getString(R.string.erreur_periode_vide));
 		}
 		
 		return erreurs;
 	}
+
+	
 
 }

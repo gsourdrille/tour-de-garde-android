@@ -2,7 +2,6 @@ package fr.edenyorke.tourdegarde.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
@@ -25,14 +24,17 @@ public abstract class CustomPeriodePickerDialog extends Dialog implements androi
 		setContentView(R.layout.custom_periodepicker_dialog);
 		setCancelable(true);
 		
-		periode = currentPeriode;
-		
+		if(currentPeriode == null){
+			periode = new Periode();
+		}else{
+			periode = currentPeriode;
+		}
 		typePeriodePicker = (NumberPicker) findViewById(R.id.customTypePeriode);
 		typePeriodePicker.setMinValue(0);
 		typePeriodePicker.setMaxValue(2);
 		typePeriodePicker.setDisplayedValues( typePeriodeArray);
 		typePeriodePicker.setOnValueChangedListener(this);
-		switch (currentPeriode.getTypePeriode()) {
+		switch (periode.getTypePeriode()) {
 		case WEEK:
 			typePeriodePicker.setValue(0);
 			break;
