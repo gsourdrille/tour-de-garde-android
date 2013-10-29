@@ -198,32 +198,42 @@
         android:layout_marginTop="40dp"
         android:layout_weight="0.00" >
 
-        <Button
-            android:id="@+id/buttonSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:background="@drawable/layout_selector"
-            android:text="@string/boutonSauver" />
-
-        <Button
-            android:id="@+id/buttonDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right"
-            android:background="@drawable/layout_selector"
-            android:text="@string/boutonSupprimer" />
-
-        <Button
-            android:id="@+id/buttonCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+        
+			<Button
+			android:id="@+id/buttonCancel"
+			android:text="@string/boutonAnnuler"
+			android:textColor="#4D5BA1"
+			android:textSize="15sp"
+		    android:layout_width="130dp"
+			android:layout_height="60dp"
+			android:background="@drawable/layout_selector"
+			android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/layout_selector"
-            android:text="@string/boutonAnnuler" />
+            android:layout_gravity="center"
+			/>
+			
+			<Button
+			android:id="@+id/buttonSave"
+			android:text="@string/boutonSauver"
+			android:textColor="#4D5BA1"
+			android:textSize="15sp"
+		    android:layout_width="130dp"
+			android:layout_height="60dp"
+			android:background="@drawable/layout_selector"
+            android:layout_gravity="center"
+            android:layout_alignParentRight="true"
+			/>
+
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="300dp"
+        android:layout_height="38dp"
+        android:background="@drawable/layout_selector"
+        android:text="@string/boutonSupprimer"
+        android:textColor="#FF0D05"
+        android:textSize="15sp" 
+        android:layout_marginTop="20dp"/>
 
 </LinearLayout>

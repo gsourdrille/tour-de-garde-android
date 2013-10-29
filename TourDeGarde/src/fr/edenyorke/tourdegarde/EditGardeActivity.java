@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -199,7 +200,6 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 			}
 		}else if(v == buttonSupprimer){
 			delete();
-			//onBackPressed();
 		}
 		
 	}
@@ -209,7 +209,6 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 	    @Override
 	    public void onDateSet(DatePicker view, int year, int monthOfYear,
 	            int dayOfMonth) {
-	        // TODO Auto-generated method stub
 	    	dateDebutCalendar.set(Calendar.YEAR, year);
 	    	dateDebutCalendar.set(Calendar.MONTH, monthOfYear);
 	    	dateDebutCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -229,18 +228,8 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 	}
 	
 	private void initValues(){
-		Garde garde = null;
-		List<Garde> listeGarde = (List<Garde>) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
-		if(!CollectionUtils.isEmpty(listeGarde)){
-			garde = listeGarde.get(0);
-		}
-		dateDebutCalendar = null;
-		dateFinCalendar = null;
-		isPeriode = true;
-		dateDebutValue.setText(R.string.nondefinie);
-		dateFinValue.setText(R.string.nondefinie);
-		periodeValue.setText(R.string.nondefinie);
-		updateEstPeriode();
+		Intent i = getIntent();
+		Garde garde = (Garde)i.getSerializableExtra("garde");
 		if(garde != null){
 			dateDebutCalendar = Calendar.getInstance();
 			dateFinCalendar = Calendar.getInstance();
@@ -253,13 +242,23 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 			currentId = garde.getId();
 			updateValues();
 			buttonSupprimer.setVisibility(View.VISIBLE);
+		}else{
+			dateDebutCalendar = null;
+			dateFinCalendar = null;
+			isPeriode = true;
+			dateDebutValue.setText(R.string.nondefinie);
+			dateFinValue.setText(R.string.nondefinie);
+			periodeValue.setText(R.string.nondefinie);
+			updateEstPeriode();
 		}
 		if(periode != null){
 			periodeBouton.setVisibility(View.VISIBLE);
 			afficherPeriode = true;
+			boutonAfficherPeriode.setChecked(true);
 		}else{
 			periodeBouton.setVisibility(View.INVISIBLE);
 			afficherPeriode = false;
+			boutonAfficherPeriode.setChecked(false);
 		}
 	}
 	
@@ -286,9 +285,9 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 	private void updateEstPeriode(){
 		 String estPeriodeString = "";
 		 if(isPeriode){
-			 estPeriodeString = "Oui";
+			 estPeriodeString = getResources().getString(R.string.oui);
 		 }else{
-			 estPeriodeString = "Non";
+			 estPeriodeString = getResources().getString(R.string.non);;
 		 }
 		 estPeriodeValue.setText(estPeriodeString);
 	}
@@ -298,20 +297,22 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 	}
 	
 	private void updatePeriode(){
-		String typePeriode = "";
-		switch(periode.getTypePeriode()){
-		case WEEK:
-			typePeriode = "1 semaine sur";
-			break;
-		case MONTH:
-			typePeriode = "1 mois sur";
-			break;
-		case TIMES:
-			typePeriode = "1 fois sur";
-			break;
+		if(periode != null){
+			String typePeriode = "";
+			switch(periode.getTypePeriode()){
+			case WEEK:
+				typePeriode = "1 semaine sur";
+				break;
+			case MONTH:
+				typePeriode = "1 mois sur";
+				break;
+			case TIMES:
+				typePeriode = "1 fois sur";
+				break;
+			}
+			String title = typePeriode + " " + String.valueOf(periode.getNumberPeriode()) ;
+			periodeValue.setText(title);
 		}
-		String title = typePeriode + " " + String.valueOf(periode.getNumberPeriode()) ;
-		periodeValue.setText(title);
 	}
 	
 	private boolean save(){
@@ -348,12 +349,14 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 				listeGarde.remove(index);
 				listeGarde.add(index, gardeEdit);
 				FilesUtils.saveOnSdCard(listeGarde, Constantes.PATH_DATA);
+				Toast.makeText(this, getResources().getString(R.string.edit_garde_ok, gardeEdit.getName()), Toast.LENGTH_SHORT).show();
 			}else{
 				Garde garde = new Garde();
 				garde.setId(UUID.randomUUID().toString());
 				populateGarde(garde);
 				listeGarde.add(garde);
 				FilesUtils.saveOnSdCard(listeGarde, Constantes.PATH_DATA);
+				Toast.makeText(this, getResources().getString(R.string.ajout_garde_ok, garde.getName()), Toast.LENGTH_SHORT).show();
 			}
 		}
 		return true;
@@ -393,22 +396,11 @@ public class EditGardeActivity extends Activity implements OnClickListener,OnKey
 			listeGarde.remove(index);
 		}
 		FilesUtils.saveOnSdCard(listeGarde, Constantes.PATH_DATA);
-		Toast.makeText(this, R.string.clear_cache, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, getResources().getString(R.string.delete_garde_ok, gardeToDelete.getName()), Toast.LENGTH_SHORT).show();
 		onBackPressed();
 	}
 	
-	private Garde findGarde(List<Garde> listeGarde){
-		Garde gardeToFind = null;
-		int index = -1;
-		while (index < listeGarde.size() && gardeToFind == null) {
-			index++;
-			Garde garde = listeGarde.get(index);
-			if (garde.getId().equals(currentId)){
-				gardeToFind = garde;
-			}
-		}
-		return gardeToFind;
-	}
+	
 	
 	private void populateGarde(Garde garde) {
 		garde.setDateDebut(dateDebutCalendar.getTime());
