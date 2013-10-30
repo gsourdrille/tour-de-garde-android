@@ -83,6 +83,9 @@ public abstract class CustomDatePickerDialog extends Dialog implements android.v
 		 }else{
 			 calendar.set(Calendar.HOUR_OF_DAY,18);
 		 }
+		 calendar.set(Calendar.MINUTE,0);
+		 calendar.set(Calendar.SECOND,0);
+		 calendar.set(Calendar.MILLISECOND,0);
 	}
 	
 	public abstract void getValue();
