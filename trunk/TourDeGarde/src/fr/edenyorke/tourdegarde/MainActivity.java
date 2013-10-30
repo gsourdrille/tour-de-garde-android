@@ -1,16 +1,25 @@
 package fr.edenyorke.tourdegarde;
 
 import java.util.Calendar;
+import java.util.List;
+
+import fr.edenyorke.tourdegarde.bean.Constantes;
+import fr.edenyorke.tourdegarde.bean.Garde;
+import fr.edenyorke.tourdegarde.utils.CollectionUtils;
+import fr.edenyorke.tourdegarde.utils.FilesUtils;
+import fr.edenyorke.tourdegarde.utils.GardeUtils;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 public class MainActivity extends Activity implements OnDateChangedListener{
 	
@@ -18,6 +27,8 @@ public class MainActivity extends Activity implements OnDateChangedListener{
 	private DatePicker datePicker;
 	private NumberPicker inDayPicker;
 	private ImageView image;
+	
+	private TextView nameGarde;
 	
 	private int year;
 	private int month;
@@ -65,6 +76,8 @@ public class MainActivity extends Activity implements OnDateChangedListener{
  		inDayPicker.setDisplayedValues( new String[] { "AM", "PM" } );
  		
  		image = (ImageView) findViewById(R.id.resultImageView);
+ 		
+ 		nameGarde = (TextView) findViewById(R.id.nameGarde);
     }
     
  // display current date
@@ -86,13 +99,51 @@ public class MainActivity extends Activity implements OnDateChangedListener{
 	public void onDateChanged(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
 		
-		//TODO Caluler date
-		boolean isTourdeGarde = false;
-		if(isTourdeGarde){
-			image.setImageResource(R.drawable.istourdegarde);
+		Calendar dateSelected = Calendar.getInstance();
+		dateSelected.set(Calendar.YEAR, view.getYear());
+		dateSelected.set(Calendar.MONTH, view.getMonth());
+		dateSelected.set(Calendar.DAY_OF_MONTH, view.getDayOfMonth());
+		
+		if(inDayPicker.getValue() == 0){
+			dateSelected.set(Calendar.HOUR_OF_DAY, 8);
 		}else{
-			image.setImageResource(R.drawable.isnottourdegarde);
+			dateSelected.set(Calendar.HOUR_OF_DAY, 18);
 		}
+		dateSelected.set(Calendar.MINUTE,0);
+		dateSelected.set(Calendar.SECOND,0);
+		dateSelected.set(Calendar.MILLISECOND,0);
+		List<Garde> listeGarde = (List<Garde>) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
+		if(CollectionUtils.isEmpty(listeGarde)){
+			//affichage message d'erreur
+		}else{
+			boolean gardeOk = false;
+			
+			//On commence par chercher les garde sans periode
+			List<Garde> listeGardeSansPeriode = GardeUtils.getGardeSansPeriode(listeGarde);
+			if(!CollectionUtils.isEmpty(listeGardeSansPeriode)){
+				Garde gardeInDate = GardeUtils.isDateBeetween(listeGardeSansPeriode, dateSelected.getTime());
+				if(gardeInDate != null){
+					gardeOk = true;
+					image.setVisibility(View.VISIBLE);
+					nameGarde.setVisibility(View.VISIBLE);
+					nameGarde.setText(getResources().getString(R.string.name_garde, gardeInDate.getName()));
+					if(gardeInDate.isEstPeriodeDeGarde()){
+						image.setImageResource(R.drawable.istourdegarde);
+					}else{
+						image.setImageResource(R.drawable.isnottourdegarde);
+					}
+					
+				}
+				
+			}
+			if(!gardeOk){
+				image.setVisibility(View.INVISIBLE);
+				nameGarde.setVisibility(View.INVISIBLE);
+			}
+			
+			
+		}
+		
 	}
     
 }

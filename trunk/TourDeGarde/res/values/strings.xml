@@ -34,4 +34,6 @@
 	<string name="delete_garde_ok">La garde %1$s a été supprimée</string>
 	
 	<string name="avec_periode">Avec période</string>	
+	
+	<string name="name_garde">(%1$s)</string>
 </resources>

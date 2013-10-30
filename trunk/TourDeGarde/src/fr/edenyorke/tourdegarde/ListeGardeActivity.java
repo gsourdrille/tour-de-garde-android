@@ -1,5 +1,6 @@
 package fr.edenyorke.tourdegarde;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -68,11 +69,11 @@ public class ListeGardeActivity extends Activity implements OnItemClickListener{
  private void initData(){
 		 
 	 List<Garde> listegarde = (List<Garde>) FilesUtils.loadFromSdCard(Constantes.PATH_DATA);
-		if(!CollectionUtils.isEmpty(listegarde)){
-			ListeGardeAdapter adapter = new ListeGardeAdapter(this, R.layout.liste_garde_view, listegarde);
-			listeGardeView.setAdapter(adapter);
-		}
-		 
+	 if(CollectionUtils.isEmpty(listegarde)){
+		 listegarde = new ArrayList<Garde>();
+	 }
+		ListeGardeAdapter adapter = new ListeGardeAdapter(this, R.layout.liste_garde_view, listegarde);
+		listeGardeView.setAdapter(adapter);
 	 }
  
  private void setRedirection(){
