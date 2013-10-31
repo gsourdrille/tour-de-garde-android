@@ -57,6 +57,14 @@ public class Garde implements Serializable  {
 	public void setId(String id) {
 		this.id = id;
 	}
+	@Override
+	public String toString() {
+		return "Garde [id=" + id + ", name=" + name + ", dateDebut="
+				+ dateDebut + ", dateFin=" + dateFin + ", estPeriodeDeGarde="
+				+ estPeriodeDeGarde + ", periode=" + periode + "]";
+	}
+	
+	
 	
 	
 	
